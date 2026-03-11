@@ -2,7 +2,8 @@ from flask import Flask, render_template, request
 from EV_prediction_3 import predict
 from dataloader import load_multiple_seasons
 import joblib
-
+import os
+os.environ["LEAGUE_CHOICE"] = "2"  # 2 = 英冠
 app = Flask(__name__)
 
 # ===== 启动时加载数据（与命令行版一致，联赛在 EV_prediction_3.py 顶部选定）=====
@@ -63,3 +64,4 @@ def index():
 if __name__ == "__main__":
 
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
