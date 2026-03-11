@@ -44,7 +44,7 @@ for k, v in LEAGUES.items():
     print(f"  {k}. {v['name']}")
 
 while True:
-    choice = input("\n输入编号: ").strip()
+    choice = os.environ.get("LEAGUE_CHOICE", "2")
     if choice in LEAGUES:
         break
     print("  无效编号，请重新输入！")
@@ -361,4 +361,5 @@ def run():
 
 
 if __name__ == "__main__":
+
     run()
