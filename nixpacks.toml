@@ -1,2 +1,5 @@
 [phases.setup]
-nixPkgs = ["gcc", "stdenv.cc.cc.lib"]
+nixPkgs = ["python311", "gcc", "glib"]
+
+[phases.install]
+cmds = ["pip install -r requirements.txt"]
