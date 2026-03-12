@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import joblib
 from dataloader import load_multiple_seasons
-from feedback_learner import save_prediction_record
+
 
 LEAGUES = {
     "1": {"name": "英超",  "folder": "data_Premier",       "model": "premier_model.pkl"},
@@ -275,17 +275,6 @@ def predict(home_team, away_team, b365h, b365d, b365a, b365ch, b365cd, b365ca,
     else:
         _rec = "建议跳过"
 
-    save_prediction_record(
-        league_name=league_cfg["name"],  # 确保 league_cfg 在作用域内
-        home_team=home_team,
-        away_team=away_team,
-        match_date=today,
-        features=_features_dict,
-        prob_upset=prob,
-        prob_strong=prob_strong,
-        ev_strong=ev_strong,
-        recommendation=_rec,
-    )
 
     print("="*45)
 
@@ -363,3 +352,4 @@ def run():
 if __name__ == "__main__":
 
     run()
+
