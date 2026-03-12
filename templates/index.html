@@ -343,6 +343,38 @@
   </header>
 
   <form method="post" autocomplete="off">
+    <!-- 联赛选择 -->
+<div class="card">
+  <div class="card-title">选择联赛</div>
+  <div style="position:relative;">
+    <select name="league" style="
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: .95rem;
+      padding: .65rem .9rem;
+      outline: none;
+      appearance: none;
+      cursor: pointer;
+      transition: border-color .2s, box-shadow .2s;
+    ">
+      {% for key, val in leagues.items() %}
+      <option value="{{ key }}" {% if key == selected_league %}selected{% endif %}>
+        {{ val.name }}
+      </option>
+      {% endfor %}
+    </select>
+    <span style="
+      position: absolute; right: .9rem; top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted); pointer-events: none; font-size: .8rem;
+    ">▾</span>
+  </div>
+</div>
+    
 
     <!-- 队伍 -->
     <div class="card">
@@ -493,4 +525,5 @@
 
 </div>
 </body>
+
 </html>
