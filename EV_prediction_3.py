@@ -34,34 +34,61 @@ FEATURES = [
     "weak_avg_corners",
 ]
 
+# # =========================
+# # 启动时选择联赛
+# # =========================
+# print("="*45)
+# print("       冷门预测系统")
+# print("="*45)
+# print("\n请选择联赛：")
+# for k, v in LEAGUES.items():
+#     print(f"  {k}. {v['name']}")
+
+# while True:
+#     choice = os.environ.get("LEAGUE_CHOICE", "2")
+#     if choice in LEAGUES:
+#         break
+#     print("  无效编号，请重新输入！")
+
+# league_cfg  = LEAGUES[choice]
+# DATA_FOLDER = league_cfg["folder"]
+# MODEL_PATH  = league_cfg["model"]
+
+# print(f"\n已选择：{league_cfg['name']}")
+# print("正在加载历史数据和模型...")
+# df_hist = load_multiple_seasons(DATA_FOLDER)
+# df_hist = df_hist.dropna(subset=["B365H", "B365D", "B365A"])
+# df_hist["Date"] = pd.to_datetime(df_hist["Date"], dayfirst=True, errors="coerce")
+# df_hist = df_hist.sort_values("Date").reset_index(drop=True)
+# model = joblib.load(MODEL_PATH)
+# print("加载完成！\n")
+
 # =========================
-# 启动时选择联赛
+# 按需加载联赛（供 web 调用）
 # =========================
-print("="*45)
-print("       冷门预测系统")
-print("="*45)
-print("\n请选择联赛：")
-for k, v in LEAGUES.items():
-    print(f"  {k}. {v['name']}")
+def load_league(choice):
+    """根据联赛编号加载数据和模型，返回 (df_hist, model, league_cfg)"""
+    if choice not in LEAGUES:
+        raise ValueError(f"无效联赛编号: {choice}")
+    cfg = LEAGUES[choice]
+    df = load_multiple_seasons(cfg["folder"])
+    df = df.dropna(subset=["B365H", "B365D", "B365A"])
+    df["Date"] = pd.to_datetime(df["Date"], dayfirst=True, errors="coerce")
+    df = df.sort_values("Date").reset_index(drop=True)
+    m = joblib.load(cfg["model"])
+    return df, m, cfg
 
-while True:
-    choice = os.environ.get("LEAGUE_CHOICE", "2")
-    if choice in LEAGUES:
-        break
-    print("  无效编号，请重新输入！")
-
-league_cfg  = LEAGUES[choice]
-DATA_FOLDER = league_cfg["folder"]
-MODEL_PATH  = league_cfg["model"]
-
-print(f"\n已选择：{league_cfg['name']}")
-print("正在加载历史数据和模型...")
-df_hist = load_multiple_seasons(DATA_FOLDER)
-df_hist = df_hist.dropna(subset=["B365H", "B365D", "B365A"])
-df_hist["Date"] = pd.to_datetime(df_hist["Date"], dayfirst=True, errors="coerce")
-df_hist = df_hist.sort_values("Date").reset_index(drop=True)
-model = joblib.load(MODEL_PATH)
-print("加载完成！\n")
+# 兼容命令行模式：如果有环境变量就预加载
+_cli_choice = os.environ.get("LEAGUE_CHOICE")
+if _cli_choice and _cli_choice in LEAGUES:
+    league_cfg  = LEAGUES[_cli_choice]
+    DATA_FOLDER = league_cfg["folder"]
+    MODEL_PATH  = league_cfg["model"]
+    df_hist     = load_multiple_seasons(DATA_FOLDER)
+    df_hist     = df_hist.dropna(subset=["B365H", "B365D", "B365A"])
+    df_hist["Date"] = pd.to_datetime(df_hist["Date"], dayfirst=True, errors="coerce")
+    df_hist     = df_hist.sort_values("Date").reset_index(drop=True)
+    model       = joblib.load(MODEL_PATH)
 
 def get_strong_avg_shots(df, team, today):
     rows = df[
@@ -106,7 +133,7 @@ def get_weak_scores(df, weak_team, today):
     return np.mean(shots_for), -np.mean(shots_against)
 
 def predict(home_team, away_team, b365h, b365d, b365a, b365ch, b365cd, b365ca,
-            psh, psd, psa, today):
+            psh, psd, psa, today，df_hist=None, model=None):
 
     strong_is_home = b365h < b365a
 
@@ -353,6 +380,7 @@ def run():
 if __name__ == "__main__":
 
     run()
+
 
 
 
