@@ -7,7 +7,7 @@ from dataloader import load_multiple_seasons
 
 LEAGUES = {
     "1": {"name": "英超",  "folder": "data_Premier",       "model": "premier_model.pkl"},
-    "2": {"name": "英冠",  "folder": "data_Championship",  "model": "championship_model.pkl"},
+    "2": {"name": "英冠",  "folder": "data_Championship",  "model": "championship_model_sklearn.pkl"},
     "3": {"name": "西甲",  "folder": "data_laliga",        "model": "laliga2_model.pkl"},
     "4": {"name": "意甲",  "folder": "data_italy",         "model": "italy2_model.pkl"},
     "5": {"name": "葡超",  "folder": "data_portugal",      "model": "portugal2_model.pkl"},
@@ -353,5 +353,6 @@ def run():
 if __name__ == "__main__":
 
     run()
+
 
 
