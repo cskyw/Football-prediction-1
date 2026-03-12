@@ -109,7 +109,7 @@ def get_weak_scores(df, weak_team, today):
     return np.mean(shots_for), -np.mean(shots_against)
 
 def predict(home_team, away_team, b365h, b365d, b365a, b365ch, b365cd, b365ca,
-            psh, psd, psa, today，df_hist=None, model=None):
+            psh, psd, psa, today):
 
     strong_is_home = b365h < b365a
 
@@ -356,6 +356,7 @@ def run():
 if __name__ == "__main__":
 
     run()
+
 
 
 
