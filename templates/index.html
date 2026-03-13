@@ -466,7 +466,7 @@
           {% if ev_num >= 0 %}
             <div class="ev-bar-fill pos" style="width: {{ [ev_num / 0.3 * 50 + 50, 100] | min }}%"></div>
           {% else %}
-            <div class="ev-bar-fill neg" style="width: {{ [50 - (-ev_num) / 0.3 * 50, 100] | min, 0] | max }}%"></div>
+            <div class="ev-bar-fill neg" style="width: {{ [[50 - (-ev_num) / 0.3 * 50, 100] | min, 0] | max }}%"></div>
           {% endif %}
         </div>
       </div>
@@ -497,4 +497,5 @@
 </body>
 
 </html>
+
 
